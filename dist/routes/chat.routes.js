@@ -1,0 +1,13 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+const express_1 = require("express");
+const celebrate_1 = require("celebrate");
+const chat_controller_1 = require("../controllers/chat.controller");
+const auth_1 = require("../middleware/auth");
+const router = (0, express_1.Router)();
+router.post('/guest', (0, celebrate_1.celebrate)({ [celebrate_1.Segments.BODY]: celebrate_1.Joi.object({ name: celebrate_1.Joi.string().allow(''), message: celebrate_1.Joi.string().required() }) }), chat_controller_1.postGuestMessage);
+router.get('/guest', chat_controller_1.listGuestMessages);
+router.use(auth_1.authenticate);
+router.post('/user', (0, celebrate_1.celebrate)({ [celebrate_1.Segments.BODY]: celebrate_1.Joi.object({ message: celebrate_1.Joi.string().required() }) }), chat_controller_1.postUserMessage);
+router.get('/user', chat_controller_1.listUserMessages);
+exports.default = router;
